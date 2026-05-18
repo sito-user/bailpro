@@ -13,6 +13,9 @@ const authRoutes = require('./routes/auth');
 const propertiesRoutes = require('./routes/properties');
 const leasesRoutes = require('./routes/leases');
 
+const paymentsRoutes = require('./routes/payments');
+const receiptsRoutes = require('./routes/receipts');
+
 const app = express();
 
 // Security headers
@@ -52,6 +55,9 @@ app.get('/healthz', (req, res) => {
 app.use('/api/v1/auth', authRoutes);
 app.use('/api/v1/properties', propertiesRoutes);
 app.use('/api/v1/leases', leasesRoutes);
+
+app.use('/api/v1/payments', paymentsRoutes);
+app.use('/api/v1/receipts', receiptsRoutes);
 
 // 404 handler
 app.use((req, res) => {
