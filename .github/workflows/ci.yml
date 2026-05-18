@@ -44,6 +44,7 @@ jobs:
         working-directory: backend
         run: npx knex migrate:latest --env test
         env:
+          DATABASE_URL: postgresql://bailpro:bailpro_test@localhost:5432/bailpro_test
           DATABASE_TEST_URL: postgresql://bailpro:bailpro_test@localhost:5432/bailpro_test
           JWT_SECRET: ci-secret-for-tests-only
 
@@ -52,6 +53,7 @@ jobs:
         run: npm test -- --coverage
         env:
           NODE_ENV: test
+          DATABASE_URL: postgresql://bailpro:bailpro_test@localhost:5432/bailpro_test
           DATABASE_TEST_URL: postgresql://bailpro:bailpro_test@localhost:5432/bailpro_test
           JWT_SECRET: ci-secret-for-tests-only
 
@@ -60,5 +62,6 @@ jobs:
         run: npm run test:coverage
         env:
           NODE_ENV: test
+          DATABASE_URL: postgresql://bailpro:bailpro_test@localhost:5432/bailpro_test
           DATABASE_TEST_URL: postgresql://bailpro:bailpro_test@localhost:5432/bailpro_test
           JWT_SECRET: ci-secret-for-tests-only
