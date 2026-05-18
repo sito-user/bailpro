@@ -45,6 +45,7 @@ jobs:
         run: npx knex migrate:latest --env test
         env:
           DATABASE_TEST_URL: postgresql://bailpro:bailpro_test@localhost:5432/bailpro_test
+          JWT_SECRET: ci-secret-for-tests-only
 
       - name: Run tests
         working-directory: backend
