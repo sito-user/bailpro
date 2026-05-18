@@ -1,0 +1,36 @@
+# Environnement — NE JAMAIS COMMITTER
+.env
+.env.local
+.env.production
+
+# Dépendances
+node_modules/
+*/node_modules/
+
+# Build
+dist/
+build/
+frontend/dist/
+
+# Uploads (quittances PDF générées)
+backend/uploads/
+
+# Logs
+*.log
+logs/
+
+# Coverage
+coverage/
+*/coverage/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
+
+# Playwright
+playwright-report/
+test-results/

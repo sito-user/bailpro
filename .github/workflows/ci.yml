@@ -1,0 +1,63 @@
+name: CI
+
+on:
+  push:
+    branches: [main, develop]
+  pull_request:
+    branches: [main, develop]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    services:
+      postgres:
+        image: postgres:16-alpine
+        env:
+          POSTGRES_USER: bailpro
+          POSTGRES_PASSWORD: bailpro_test
+          POSTGRES_DB: bailpro_test
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+          cache-dependency-path: backend/package-lock.json
+
+      - name: Install dependencies
+        working-directory: backend
+        run: npm ci
+
+      - name: Run migrations
+        working-directory: backend
+        run: npx knex migrate:latest --env test
+        env:
+          DATABASE_TEST_URL: postgresql://bailpro:bailpro_test@localhost:5432/bailpro_test
+
+      - name: Run tests
+        working-directory: backend
+        run: npm test -- --coverage
+        env:
+          NODE_ENV: test
+          DATABASE_TEST_URL: postgresql://bailpro:bailpro_test@localhost:5432/bailpro_test
+          JWT_SECRET: ci-secret-for-tests-only
+
+      - name: Check coverage threshold
+        working-directory: backend
+        run: npm run test:coverage
+        env:
+          NODE_ENV: test
+          DATABASE_TEST_URL: postgresql://bailpro:bailpro_test@localhost:5432/bailpro_test
+          JWT_SECRET: ci-secret-for-tests-only
