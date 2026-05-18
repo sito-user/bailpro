@@ -10,6 +10,9 @@ const { PORT, CORS_ORIGIN } = require('./config/env');
 const errorHandler = require('./middleware/errorHandler');
 const authRoutes = require('./routes/auth');
 
+const propertiesRoutes = require('./routes/properties');
+const leasesRoutes = require('./routes/leases');
+
 const app = express();
 
 // Security headers
@@ -47,6 +50,8 @@ app.get('/healthz', (req, res) => {
 
 // Routes
 app.use('/api/v1/auth', authRoutes);
+app.use('/api/v1/properties', propertiesRoutes);
+app.use('/api/v1/leases', leasesRoutes);
 
 // 404 handler
 app.use((req, res) => {
