@@ -16,6 +16,9 @@ const leasesRoutes = require('./routes/leases');
 const paymentsRoutes = require('./routes/payments');
 const receiptsRoutes = require('./routes/receipts');
 
+const maintenanceRoutes = require('./routes/maintenance');
+const dashboardRoutes = require('./routes/dashboard');
+
 const app = express();
 
 // Security headers
@@ -58,6 +61,9 @@ app.use('/api/v1/leases', leasesRoutes);
 
 app.use('/api/v1/payments', paymentsRoutes);
 app.use('/api/v1/receipts', receiptsRoutes);
+
+app.use('/api/v1/maintenance-requests', maintenanceRoutes);
+app.use('/api/v1/dashboard', dashboardRoutes);
 
 // 404 handler
 app.use((req, res) => {
