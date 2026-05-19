@@ -8,16 +8,16 @@ import {
 import './Layout.css';
 
 const adminNavItems = [
-  { to: '/dashboard', icon: LayoutDashboard, label: 'Tableau de bord' },
-  { to: '/properties', icon: Building2, label: 'Logements' },
-  { to: '/leases', icon: FileText, label: 'Baux' },
-  { to: '/maintenance', icon: Wrench, label: 'Maintenance' },
+  { to: '/app/dashboard', icon: LayoutDashboard, label: 'Tableau de bord' },
+  { to: '/app/properties', icon: Building2, label: 'Logements' },
+  { to: '/app/leases', icon: FileText, label: 'Baux' },
+  { to: '/app/maintenance', icon: Wrench, label: 'Maintenance' },
 ];
 
 const tenantNavItems = [
-  { to: '/tenant', icon: Home, label: 'Mon espace' },
-  { to: '/my-receipts', icon: Receipt, label: 'Mes quittances' },
-  { to: '/my-requests', icon: ClipboardList, label: 'Mes demandes' },
+  { to: '/app/tenant', icon: Home, label: 'Mon espace' },
+  { to: '/app/my-receipts', icon: Receipt, label: 'Mes quittances' },
+  { to: '/app/my-requests', icon: ClipboardList, label: 'Mes demandes' },
 ];
 
 export default function Layout() {
