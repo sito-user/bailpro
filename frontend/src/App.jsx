@@ -8,6 +8,7 @@ import DashboardPage from './pages/DashboardPage';
 import PropertiesPage from './pages/PropertiesPage';
 import LeasesPage from './pages/LeasesPage';
 import MaintenancePage from './pages/MaintenancePage';
+import TenantPortalPage from './pages/TenantPortal';
 
 const ProtectedRoute = ({ children }) => {
   const { user, loading } = useAuth();
@@ -35,6 +36,7 @@ const AppRoutes = () => (
       <Route path="maintenance" element={<MaintenancePage />} />
     </Route>
     <Route path="*" element={<Navigate to="/dashboard" replace />} />
+    <Route path="tenant" element={<TenantPortalPage />} />
   </Routes>
 );
 

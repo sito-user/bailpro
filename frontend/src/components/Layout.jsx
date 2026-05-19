@@ -4,12 +4,14 @@ import { Outlet, NavLink } from 'react-router-dom';
 import { useAuth } from '../hooks/useAuth';
 import { LayoutDashboard, Building2, FileText, Wrench, LogOut, Menu, X } from 'lucide-react';
 import './Layout.css';
+import { LayoutDashboard, Building2, FileText, Wrench, LogOut, Menu, X, Home } from 'lucide-react';
 
 const navItems = [
   { to: '/dashboard', icon: LayoutDashboard, label: 'Tableau de bord' },
   { to: '/properties', icon: Building2, label: 'Logements' },
   { to: '/leases', icon: FileText, label: 'Baux' },
   { to: '/maintenance', icon: Wrench, label: 'Maintenance' },
+  { to: '/tenant', icon: Home, label: 'Mon espace' },
 ];
 
 export default function Layout() {

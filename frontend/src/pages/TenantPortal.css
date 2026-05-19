@@ -1,0 +1,57 @@
+.tenant-portal { max-width: 700px; }
+
+.tenant-card {
+  background: var(--color-white);
+  border: 1px solid var(--color-gray-200);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
+  margin-bottom: 16px;
+  overflow: hidden;
+  border-left: 3px solid var(--color-gray-200);
+}
+
+.tenant-card--paid { border-left-color: #22c55e; }
+.tenant-card--pending { border-left-color: #f59e0b; }
+
+.tenant-card__header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 14px 20px;
+  background: var(--color-gray-50);
+  border-bottom: 1px solid var(--color-gray-100);
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--color-gray-700);
+}
+
+.tenant-card__body { padding: 20px; }
+.tenant-card__body--no-padding { padding: 0; }
+
+.tenant-info-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+.tenant-info-item { display: flex; flex-direction: column; gap: 4px; }
+.tenant-info-label { font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; color: var(--color-gray-400); }
+.tenant-info-value { font-size: 14px; font-weight: 500; color: var(--color-gray-900); }
+.tenant-info-value--amount { font-size: 18px; font-weight: 700; }
+
+.payment-status {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.payment-status__info { display: flex; align-items: center; gap: 12px; }
+.payment-status__amount { font-size: 24px; font-weight: 800; color: var(--color-gray-900); }
+
+.badge--unpaid { background: #fef9c3; color: #b45309; }
+
+@media (max-width: 480px) {
+  .tenant-info-grid { grid-template-columns: 1fr; }
+  .payment-status { flex-direction: column; align-items: flex-start; }
+}
