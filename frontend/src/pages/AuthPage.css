@@ -147,3 +147,22 @@
   font-weight: 600;
   text-decoration: underline;
 }
+
+.role-badge {
+  display: inline-block;
+  padding: 4px 12px;
+  border-radius: 99px;
+  font-size: 12px;
+  font-weight: 600;
+  margin-top: 8px;
+}
+
+.role-badge--admin {
+  background: #e0e7ff;
+  color: #4338ca;
+}
+
+.role-badge--tenant {
+  background: #dcfce7;
+  color: #16a34a;
+}

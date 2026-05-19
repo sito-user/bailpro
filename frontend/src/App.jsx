@@ -12,6 +12,7 @@ import TenantPortalPage from './pages/TenantPortal';
 import MyReceiptsPage from './pages/MyReceipts';
 import MyRequestsPage from './pages/MyRequests';
 import ReceiptViewPage from './pages/ReceiptView';
+import WelcomePage from './pages/WelcomePage';
 
 const ProtectedRoute = ({ children }) => {
   const { user, loading } = useAuth();
@@ -37,7 +38,7 @@ const AppRoutes = () => (
   <Routes>
     <Route path="/login" element={<PublicRoute><LoginPage /></PublicRoute>} />
     <Route path="/register" element={<PublicRoute><RegisterPage /></PublicRoute>} />
-    <Route path="/" element={<ProtectedRoute><Layout /></ProtectedRoute>}>
+    <Route path="/" element={<ProtectedRoute><WelcomePage /></ProtectedRoute>}>
       <Route index element={<RedirectByRole />} />
       <Route path="dashboard" element={<DashboardPage />} />
       <Route path="properties" element={<PropertiesPage />} />
