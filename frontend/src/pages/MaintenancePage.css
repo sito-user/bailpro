@@ -1,0 +1,78 @@
+.maintenance-page { max-width: 900px; }
+
+.maintenance-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.maint-card {
+  background: var(--color-white);
+  border: 1px solid var(--color-gray-200);
+  border-radius: var(--radius-lg);
+  padding: 18px 20px;
+  box-shadow: var(--shadow-sm);
+  border-left: 3px solid var(--color-gray-200);
+}
+
+.maint-card--open { border-left-color: #ef4444; }
+.maint-card--in_progress { border-left-color: #f59e0b; }
+.maint-card--resolved { border-left-color: #22c55e; }
+.maint-card--closed { border-left-color: var(--color-gray-300); }
+
+.maint-card__header { margin-bottom: 8px; }
+.maint-card__title-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 4px;
+}
+.maint-card__title {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--color-gray-900);
+}
+.maint-card__address {
+  font-size: 12px;
+  color: var(--color-gray-400);
+}
+.maint-card__desc {
+  font-size: 13px;
+  color: var(--color-gray-600);
+  margin-bottom: 12px;
+  line-height: 1.5;
+}
+.maint-card__footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+.maint-card__tenant {
+  font-size: 12px;
+  color: var(--color-gray-400);
+}
+
+.status-select {
+  height: 32px;
+  padding: 0 10px;
+  border: 1px solid var(--color-gray-200);
+  border-radius: var(--radius-sm);
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--color-gray-700);
+  background: var(--color-white);
+  cursor: pointer;
+  font-family: inherit;
+}
+
+.badge--priority-low { background: #f4f4f5; color: #71717a; }
+.badge--priority-medium { background: #e0e7ff; color: #4338ca; }
+.badge--priority-high { background: #fef9c3; color: #b45309; }
+.badge--priority-urgent { background: #fef2f2; color: #dc2626; }
+
+.form-textarea {
+  height: 80px;
+  padding: 10px 12px;
+  resize: vertical;
+}

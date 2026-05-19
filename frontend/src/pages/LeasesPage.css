@@ -1,0 +1,19 @@
+.leases-page { max-width: 900px; }
+
+.btn--sm { height: 32px; padding: 0 12px; font-size: 12px; }
+
+.badge--lease-active { background: #dcfce7; color: #16a34a; }
+.badge--lease-terminated { background: #f4f4f5; color: #71717a; }
+.badge--lease-pending { background: #fef9c3; color: #b45309; }
+
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+@media (max-width: 640px) {
+  .form-row { grid-template-columns: 1fr; }
+  .data-table th:nth-child(4),
+  .data-table td:nth-child(4) { display: none; }
+}
