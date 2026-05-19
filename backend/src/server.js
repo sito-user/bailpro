@@ -66,9 +66,6 @@ app.use('/api/v1/receipts', receiptsRoutes);
 
 app.use('/api/v1/maintenance-requests', maintenanceRoutes);
 app.use('/api/v1/dashboard', dashboardRoutes);
-
-app.use('/api/v1/maintenance-requests', maintenanceRoutes);
-app.use('/api/v1/dashboard', dashboardRoutes);
 app.use('/api/v1/ai', aiRoutes);
 
 // 404 handler

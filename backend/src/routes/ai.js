@@ -55,7 +55,7 @@ ${openMaintenance.map(m => `- ${m.title} — Priorité: ${m.priority} — Statut
     `.trim();
 
     const response = await anthropic.messages.create({
-      model: 'claude-sonnet-4-20250514',
+      model: 'claude-sonnet-4-5',
       max_tokens: 500,
       system: context,
       messages: [{ role: 'user', content: message }],
