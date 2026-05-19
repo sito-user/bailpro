@@ -13,6 +13,7 @@ import MyReceiptsPage from './pages/MyReceipts';
 import MyRequestsPage from './pages/MyRequests';
 import ReceiptViewPage from './pages/ReceiptView';
 import WelcomePage from './pages/WelcomePage';
+import AiAssistantPage from './pages/AiAssistant';
 
 const ProtectedRoute = ({ children }) => {
   const { user, loading } = useAuth();
@@ -48,6 +49,7 @@ const AppRoutes = () => (
       <Route path="tenant" element={<TenantPortalPage />} />
       <Route path="my-receipts" element={<MyReceiptsPage />} />
       <Route path="my-requests" element={<MyRequestsPage />} />
+      <Route path="ai" element={<AiAssistantPage />} />
     </Route>
     <Route path="/receipt/:paymentId" element={<ProtectedRoute><ReceiptViewPage /></ProtectedRoute>} />
     <Route path="*" element={<Navigate to="/" replace />} />

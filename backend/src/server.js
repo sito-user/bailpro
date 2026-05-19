@@ -19,6 +19,9 @@ const receiptsRoutes = require('./routes/receipts');
 const maintenanceRoutes = require('./routes/maintenance');
 const dashboardRoutes = require('./routes/dashboard');
 
+const aiRoutes = require('./routes/ai');
+app.use('/api/v1/ai', aiRoutes);
+
 const app = express();
 
 // Security headers

@@ -3,7 +3,7 @@ import { Outlet, NavLink } from 'react-router-dom';
 import { useAuth } from '../hooks/useAuth';
 import {
   LayoutDashboard, Building2, FileText, Wrench,
-  LogOut, Menu, X, Home, Receipt, ClipboardList
+  LogOut, Menu, X, Home, Receipt, ClipboardList, Sparkles
 } from 'lucide-react';
 import './Layout.css';
 
@@ -12,6 +12,7 @@ const adminNavItems = [
   { to: '/app/properties', icon: Building2, label: 'Logements' },
   { to: '/app/leases', icon: FileText, label: 'Baux' },
   { to: '/app/maintenance', icon: Wrench, label: 'Maintenance' },
+  { to: '/app/ai', icon: Sparkles, label: 'Assistant IA' },
 ];
 
 const tenantNavItems = [
