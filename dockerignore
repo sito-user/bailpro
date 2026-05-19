@@ -1,0 +1,14 @@
+node_modules
+.env
+.env.local
+dist
+build
+coverage
+uploads
+*.log
+.git
+.gitignore
+README.md
+tests/e2e
+playwright-report
+test-results
