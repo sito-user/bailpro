@@ -20,7 +20,6 @@ const maintenanceRoutes = require('./routes/maintenance');
 const dashboardRoutes = require('./routes/dashboard');
 
 const aiRoutes = require('./routes/ai');
-app.use('/api/v1/ai', aiRoutes);
 
 const app = express();
 
@@ -67,6 +66,10 @@ app.use('/api/v1/receipts', receiptsRoutes);
 
 app.use('/api/v1/maintenance-requests', maintenanceRoutes);
 app.use('/api/v1/dashboard', dashboardRoutes);
+
+app.use('/api/v1/maintenance-requests', maintenanceRoutes);
+app.use('/api/v1/dashboard', dashboardRoutes);
+app.use('/api/v1/ai', aiRoutes);
 
 // 404 handler
 app.use((req, res) => {
