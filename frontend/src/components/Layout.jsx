@@ -2,7 +2,6 @@ import React from 'react';
 import { useState } from 'react';
 import { Outlet, NavLink } from 'react-router-dom';
 import { useAuth } from '../hooks/useAuth';
-import { LayoutDashboard, Building2, FileText, Wrench, LogOut, Menu, X } from 'lucide-react';
 import './Layout.css';
 import { LayoutDashboard, Building2, FileText, Wrench, LogOut, Menu, X, Home } from 'lucide-react';
 
