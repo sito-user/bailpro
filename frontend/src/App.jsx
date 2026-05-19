@@ -20,8 +20,14 @@ const ProtectedRoute = ({ children }) => {
 const PublicRoute = ({ children }) => {
   const { user, loading } = useAuth();
   if (loading) return <div className="page-loader">Chargement...</div>;
-  if (user) return <Navigate to="/dashboard" replace />;
+  if (user) return <Navigate to="/" replace />;
   return children;
+};
+
+const RedirectByRole = () => {
+  const { user } = useAuth();
+  if (user?.role === 'locataire') return <Navigate to="/tenant" replace />;
+  return <Navigate to="/dashboard" replace />;
 };
 
 const AppRoutes = () => (
@@ -29,14 +35,14 @@ const AppRoutes = () => (
     <Route path="/login" element={<PublicRoute><LoginPage /></PublicRoute>} />
     <Route path="/register" element={<PublicRoute><RegisterPage /></PublicRoute>} />
     <Route path="/" element={<ProtectedRoute><Layout /></ProtectedRoute>}>
-      <Route index element={<Navigate to="/dashboard" replace />} />
+      <Route index element={<RedirectByRole />} />
       <Route path="dashboard" element={<DashboardPage />} />
       <Route path="properties" element={<PropertiesPage />} />
       <Route path="leases" element={<LeasesPage />} />
       <Route path="maintenance" element={<MaintenancePage />} />
+      <Route path="tenant" element={<TenantPortalPage />} />
     </Route>
-    <Route path="*" element={<Navigate to="/dashboard" replace />} />
-    <Route path="tenant" element={<TenantPortalPage />} />
+    <Route path="*" element={<Navigate to="/" replace />} />
   </Routes>
 );
 
