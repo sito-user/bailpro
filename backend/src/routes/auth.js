@@ -5,6 +5,7 @@ const Joi = require('joi');
 const db = require('../config/db');
 const { JWT_SECRET, JWT_EXPIRES_IN, NODE_ENV } = require('../config/env');
 const { requireAuth } = require('../middleware/auth');
+const { sendWelcomeEmail } = require('../services/emailService');
 
 const router = express.Router();
 
@@ -87,6 +88,14 @@ router.post('/register', async (req, res, next) => {
     );
 
     setTokenCookie(res, token);
+
+    // Send welcome email (non-blocking)
+    sendWelcomeEmail({
+      to: email,
+      full_name,
+      role: 'admin',
+      org_name: org_name,
+    }).catch(console.error);
 
     return res.status(201).json({
       user: result.user,
