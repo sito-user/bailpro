@@ -11,7 +11,7 @@
         "start": "node src/server.js",
         "test": "jest --forceExit --runInBand",
         "test:coverage": "jest --coverage --forceExit --runInBand",
-        "test:e2e": "playwright test", 
+        "test:e2e": "playwright test",
         "start:prod": "node src/scripts/migrate.js && node src/server.js"
     },
     "keywords": [],
