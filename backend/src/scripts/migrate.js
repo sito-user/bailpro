@@ -1,5 +1,5 @@
 const knex = require('knex');
-const knexfile = require('../../knexfile');
+const knexfile = require('../../../knexfile');
 
 async function runMigrations() {
   const db = knex(knexfile.production);
