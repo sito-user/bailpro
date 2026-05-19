@@ -1,21 +1,31 @@
-import React from 'react';
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { Outlet, NavLink } from 'react-router-dom';
 import { useAuth } from '../hooks/useAuth';
+import {
+  LayoutDashboard, Building2, FileText, Wrench,
+  LogOut, Menu, X, Home, Receipt, ClipboardList
+} from 'lucide-react';
 import './Layout.css';
-import { LayoutDashboard, Building2, FileText, Wrench, LogOut, Menu, X, Home } from 'lucide-react';
 
-const navItems = [
+const adminNavItems = [
   { to: '/dashboard', icon: LayoutDashboard, label: 'Tableau de bord' },
   { to: '/properties', icon: Building2, label: 'Logements' },
   { to: '/leases', icon: FileText, label: 'Baux' },
   { to: '/maintenance', icon: Wrench, label: 'Maintenance' },
+];
+
+const tenantNavItems = [
   { to: '/tenant', icon: Home, label: 'Mon espace' },
+  { to: '/my-receipts', icon: Receipt, label: 'Mes quittances' },
+  { to: '/my-requests', icon: ClipboardList, label: 'Mes demandes' },
 ];
 
 export default function Layout() {
   const { user, logout } = useAuth();
   const [sidebarOpen, setSidebarOpen] = useState(false);
+
+  const isLocataire = user?.role === 'locataire';
+  const navItems = isLocataire ? tenantNavItems : adminNavItems;
 
   return (
     <div className="layout">

@@ -1,0 +1,6 @@
+.my-requests { max-width: 700px; }
+
+.badge--status-open { background: #fef2f2; color: #dc2626; }
+.badge--status-in_progress { background: #fef9c3; color: #b45309; }
+.badge--status-resolved { background: #dcfce7; color: #16a34a; }
+.badge--status-closed { background: #f4f4f5; color: #71717a; }
