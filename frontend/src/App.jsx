@@ -11,6 +11,7 @@ import MaintenancePage from './pages/MaintenancePage';
 import TenantPortalPage from './pages/TenantPortal';
 import MyReceiptsPage from './pages/MyReceipts';
 import MyRequestsPage from './pages/MyRequests';
+import ReceiptViewPage from './pages/ReceiptView';
 
 const ProtectedRoute = ({ children }) => {
   const { user, loading } = useAuth();
@@ -45,6 +46,7 @@ const AppRoutes = () => (
       <Route path="tenant" element={<TenantPortalPage />} />
       <Route path="my-receipts" element={<MyReceiptsPage />} />
       <Route path="my-requests" element={<MyRequestsPage />} />
+      <Route path="/receipt/:paymentId" element={<ProtectedRoute><ReceiptViewPage /></ProtectedRoute>} />
     </Route>
     <Route path="*" element={<Navigate to="/" replace />} />
   </Routes>

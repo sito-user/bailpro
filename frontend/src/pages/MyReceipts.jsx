@@ -3,6 +3,7 @@ import { useAuth } from '../hooks/useAuth';
 import { getLeases, getLeasePayments } from '../api/leases';
 import { Receipt, Download } from 'lucide-react';
 import './MyReceipts.css';
+import { Link } from 'react-router-dom';
 
 export default function MyReceipts() {
   const { user } = useAuth();
@@ -71,7 +72,9 @@ export default function MyReceipts() {
                   <td className="td--amount">{formatAmount(p.amount)}</td>
                   <td>{p.paid_at ? formatDate(p.paid_at) : '-'}</td>
                   <td>
-                    <span className="badge badge--available">Disponible</span>
+                    <Link to={`/receipt/${p.id}`} className="btn btn--secondary btn--sm">
+                      Voir le reçu
+                    </Link>
                   </td>
                 </tr>
               ))}

@@ -1,0 +1,112 @@
+.receipt-page { max-width: 700px; margin: 0 auto; }
+
+.receipt-actions {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 24px;
+  gap: 12px;
+}
+
+.receipt-doc {
+  background: var(--color-white);
+  border: 1px solid var(--color-gray-200);
+  border-radius: var(--radius-lg);
+  padding: 40px;
+  box-shadow: var(--shadow-md);
+}
+
+.receipt-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  margin-bottom: 24px;
+}
+
+.receipt-logo {
+  font-size: 28px;
+  font-weight: 800;
+  letter-spacing: -1px;
+  color: var(--color-black);
+}
+
+.receipt-title { text-align: right; }
+.receipt-title h1 {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--color-gray-900);
+  margin-bottom: 4px;
+}
+
+.receipt-number {
+  font-size: 13px;
+  color: var(--color-gray-500);
+  font-family: monospace;
+}
+
+.receipt-divider {
+  height: 1px;
+  background: var(--color-gray-200);
+  margin: 24px 0;
+}
+
+.receipt-body {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.receipt-section h2 {
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--color-gray-400);
+  margin-bottom: 8px;
+}
+
+.receipt-section p {
+  font-size: 14px;
+  color: var(--color-gray-700);
+  margin-bottom: 4px;
+}
+
+.receipt-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 14px;
+}
+
+.receipt-table tr {
+  border-bottom: 1px solid var(--color-gray-100);
+}
+
+.receipt-table tr:last-child { border-bottom: none; }
+
+.receipt-table td {
+  padding: 10px 0;
+  color: var(--color-gray-600);
+}
+
+.receipt-table td:last-child {
+  text-align: right;
+  color: var(--color-gray-900);
+}
+
+.receipt-footer {
+  text-align: center;
+  font-size: 12px;
+  color: var(--color-gray-400);
+  line-height: 1.6;
+}
+
+/* Print styles */
+@media print {
+  .no-print { display: none !important; }
+  .receipt-page { max-width: 100%; }
+  .receipt-doc {
+    border: none;
+    box-shadow: none;
+    padding: 0;
+  }
+  body { background: white; }
+}
