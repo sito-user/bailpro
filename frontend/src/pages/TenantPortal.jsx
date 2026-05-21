@@ -4,6 +4,7 @@ import { getLeases, getLeasePayments } from '../api/leases';
 import { createPayment } from '../api/payments';
 import { Home, CreditCard, FileText, CheckCircle, AlertCircle } from 'lucide-react';
 import './TenantPortal.css';
+import PaymentModal from '../components/PaymentModal';
 
 export default function TenantPortal() {
   const { user } = useAuth();
@@ -12,6 +13,7 @@ export default function TenantPortal() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const [paying, setPaying] = useState(null);
+  const [payingLease, setPayingLease] = useState(null);
 
   const load = async () => {
     setLoading(true);
@@ -46,7 +48,7 @@ export default function TenantPortal() {
         due_date: today,
         payment_method: 'mobile_money_mock',
       });
-      alert('Paiement effectue ! Votre quittance a ete generee.');
+      alert('Paiement effectué ! Votre quittance a été générée.');
       load();
     } catch (err) {
       alert(err.response?.data?.message || 'Erreur lors du paiement');
@@ -63,6 +65,13 @@ export default function TenantPortal() {
 
   return (
     <div className="tenant-portal">
+      {payingLease && (
+        <PaymentModal
+          lease={payingLease}
+          onClose={() => setPayingLease(null)}
+          onSuccess={() => { setPayingLease(null); load(); }}
+        />
+      )}
       <div className="page-header">
         <h1 className="page-title">Bonjour, {user?.full_name}</h1>
         <p className="page-subtitle">Votre espace locataire</p>
@@ -117,9 +126,8 @@ export default function TenantPortal() {
                       </span>
                     </div>
                     {!isPaid && (
-                      <button className="btn btn--primary" onClick={() => handlePay(lease)} disabled={paying === lease.id}>
-                        <CreditCard size={14} />
-                        {paying === lease.id ? 'Traitement...' : 'Payer via Mobile Money'}
+                      <button className="btn btn--primary" onClick={() => setPayingLease(lease)}>
+                        💳Payer le loyer
                       </button>
                     )}
                   </div>
