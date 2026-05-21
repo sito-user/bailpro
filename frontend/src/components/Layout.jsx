@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Outlet, NavLink } from 'react-router-dom';
 import { useAuth } from '../hooks/useAuth';
+import NotificationBell from './NotificationBell';
 import {
   LayoutDashboard, Building2, FileText, Wrench,
   LogOut, Menu, X, Home, Receipt, ClipboardList, Sparkles, UserPlus, Calendar
@@ -61,6 +62,7 @@ export default function Layout() {
         <header className="topbar">
           <button className="topbar__menu" onClick={() => setSidebarOpen(true)}><Menu size={22} /></button>
           <span className="topbar__logo">BailPro</span>
+          <NotificationBell />
           <div className="sidebar__avatar topbar__avatar">{user?.full_name?.[0]?.toUpperCase() || 'U'}</div>
         </header>
         <main className="layout__content"><Outlet /></main>

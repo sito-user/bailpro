@@ -23,6 +23,8 @@ const aiRoutes = require('./routes/ai');
 
 const usersRoutes = require('./routes/users');
 
+const notificationsRoutes = require('./routes/notifications');
+
 const app = express();
 
 // Security headers
@@ -72,6 +74,7 @@ app.use('/api/v1/ai', aiRoutes);
 
 app.use('/api/v1/users', usersRoutes);
 
+app.use('/api/v1/notifications', notificationsRoutes);
 
 // 404 handler
 app.use((req, res) => {
