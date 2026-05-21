@@ -70,8 +70,7 @@ describe('POST /api/v1/auth/login', () => {
   it('should login successfully and return cookie', async () => {
     const res = await request(app)
       .post('/api/v1/auth/login')
-      .send({ email: 'marie@test.com', password: 'Password123' });
-
+      .send({ identifier: 'marie@test.com', password: 'Password123' })
     expect(res.status).toBe(200);
     expect(res.body.user.email).toBe('marie@test.com');
     expect(res.headers['set-cookie']).toBeDefined();
@@ -80,7 +79,7 @@ describe('POST /api/v1/auth/login', () => {
   it('should return 401 with wrong password', async () => {
     const res = await request(app)
       .post('/api/v1/auth/login')
-      .send({ email: 'marie@test.com', password: 'WrongPassword' });
+      .send({ identifier: 'marie@test.com', password: 'WrongPassword' });
 
     expect(res.status).toBe(401);
     expect(res.body.error).toBe('INVALID_CREDENTIALS');
@@ -89,7 +88,7 @@ describe('POST /api/v1/auth/login', () => {
   it('should return 401 with unknown email', async () => {
     const res = await request(app)
       .post('/api/v1/auth/login')
-      .send({ email: 'unknown@test.com', password: 'Password123' });
+      .send({ identifier: 'unknown@test.com', password: 'Password123' });
 
     expect(res.status).toBe(401);
     expect(res.body.error).toBe('INVALID_CREDENTIALS');
