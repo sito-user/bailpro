@@ -85,6 +85,9 @@ app.use(errorHandler);
 if (process.env.NODE_ENV !== 'test') {
   app.listen(PORT, () => {
     console.log(`BailPro API running on port ${PORT}`);
+    // Start daily scheduler
+    const { startScheduler } = require('./scripts/scheduler');
+    startScheduler();
   });
 }
 
