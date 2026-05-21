@@ -3,7 +3,7 @@ import { Outlet, NavLink } from 'react-router-dom';
 import { useAuth } from '../hooks/useAuth';
 import {
   LayoutDashboard, Building2, FileText, Wrench,
-  LogOut, Menu, X, Home, Receipt, ClipboardList, Sparkles, UserPlus
+  LogOut, Menu, X, Home, Receipt, ClipboardList, Sparkles, UserPlus, Calendar
 } from 'lucide-react';
 import './Layout.css';
 
@@ -14,6 +14,8 @@ const adminNavItems = [
   { to: '/app/maintenance', icon: Wrench, label: 'Maintenance' },
   { to: '/app/ai', icon: Sparkles, label: 'Assistant IA' },
   { to: '/app/tenants', icon: UserPlus, label: 'Locataires' },
+  { to: '/app/calendar', icon: Calendar, label: 'Calendrier' },
+
 ];
 
 const tenantNavItems = [

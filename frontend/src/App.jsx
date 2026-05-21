@@ -15,6 +15,7 @@ import ReceiptViewPage from './pages/ReceiptView';
 import WelcomePage from './pages/WelcomePage';
 import AiAssistantPage from './pages/AiAssistant';
 import TenantsManagerPage from './pages/TenantsManager';
+import PaymentCalendarPage from './pages/PaymentCalendar';
 
 const ProtectedRoute = ({ children }) => {
   const { user, loading } = useAuth();
@@ -52,7 +53,7 @@ const AppRoutes = () => (
       <Route path="my-requests" element={<MyRequestsPage />} />
       <Route path="ai" element={<AiAssistantPage />} />
       <Route path="tenants" element={<TenantsManagerPage />} />
-
+      <Route path="calendar" element={<PaymentCalendarPage />} />
     </Route>
     <Route path="/receipt/:paymentId" element={<ProtectedRoute><ReceiptViewPage /></ProtectedRoute>} />
     <Route path="*" element={<Navigate to="/" replace />} />
