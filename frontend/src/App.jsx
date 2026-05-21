@@ -14,6 +14,7 @@ import MyRequestsPage from './pages/MyRequests';
 import ReceiptViewPage from './pages/ReceiptView';
 import WelcomePage from './pages/WelcomePage';
 import AiAssistantPage from './pages/AiAssistant';
+import TenantsManagerPage from './pages/TenantsManager';
 
 const ProtectedRoute = ({ children }) => {
   const { user, loading } = useAuth();
@@ -50,6 +51,8 @@ const AppRoutes = () => (
       <Route path="my-receipts" element={<MyReceiptsPage />} />
       <Route path="my-requests" element={<MyRequestsPage />} />
       <Route path="ai" element={<AiAssistantPage />} />
+      <Route path="tenants" element={<TenantsManagerPage />} />
+
     </Route>
     <Route path="/receipt/:paymentId" element={<ProtectedRoute><ReceiptViewPage /></ProtectedRoute>} />
     <Route path="*" element={<Navigate to="/" replace />} />
