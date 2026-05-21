@@ -20,7 +20,7 @@ export default function LoginPage() {
     setError('');
     setLoading(true);
     try {
-      const res = await login(form);
+      const res = await login({ identifier: form.email, password: form.password });
       const user = res.data.user;
 
       if (isTenant && user.role !== 'locataire') {
@@ -64,11 +64,15 @@ export default function LoginPage() {
         <form className="auth-form" onSubmit={handleSubmit}>
           {error && <div className="auth-form__error">{error}</div>}
 
-          <div className="form-group">
-            <label className="form-label">Email</label>
-            <input className="form-input" type="email" placeholder="vous@exemple.com"
-              value={form.email} onChange={(e) => setForm({ ...form, email: e.target.value })} required />
-          </div>
+        <div className="form-group">
+          <label className="form-label">Email ou numéro de téléphone</label>
+          <input className="form-input"
+            type="text"
+            placeholder="email@exemple.com ou +225 07 00 00 00"
+            value={form.email}
+            onChange={(e) => setForm({ ...form, email: e.target.value })}
+            required />
+        </div>
 
           <div className="form-group">
             <label className="form-label">Mot de passe</label>
