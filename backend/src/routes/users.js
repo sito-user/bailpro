@@ -12,9 +12,13 @@ const createTenantSchema = Joi.object({
   email: Joi.string().email().required(),
   phone: Joi.string().max(30).optional(),
   password: Joi.string().min(8).optional(),
+  property_id: Joi.string().uuid().optional(),
+  start_date: Joi.date().optional(),
+  monthly_rent: Joi.number().positive().optional(),
+  deposit_amount: Joi.number().min(0).optional(),
 });
 
-// GET /api/v1/users/tenants — list all tenants of the org
+// GET /api/v1/users/tenants
 router.get('/tenants', requireAuth, requireRole('admin', 'gestionnaire'), async (req, res, next) => {
   try {
     const tenants = await db('users')
@@ -28,62 +32,71 @@ router.get('/tenants', requireAuth, requireRole('admin', 'gestionnaire'), async 
   }
 });
 
-// POST /api/v1/users/tenants — create a tenant
+// POST /api/v1/users/tenants
 router.post('/tenants', requireAuth, requireRole('admin', 'gestionnaire'), async (req, res, next) => {
   try {
     const { error, value } = createTenantSchema.validate(req.body);
     if (error) {
-      return res.status(400).json({
-        error: 'VALIDATION_ERROR',
-        message: error.details[0].message,
-      });
+      return res.status(400).json({ error: 'VALIDATION_ERROR', message: error.details[0].message });
     }
 
-    const { full_name, email, phone } = value;
+    const { full_name, email, phone, property_id, start_date, monthly_rent, deposit_amount } = value;
 
-    // Check if email already exists in org
-    const existing = await db('users')
-      .where({ org_id: req.orgId, email })
-      .first();
-
+    const existing = await db('users').where({ org_id: req.orgId, email }).first();
     if (existing) {
-      return res.status(409).json({
-        error: 'EMAIL_TAKEN',
-        message: 'Cet email est déjà utilisé dans votre organisation',
-      });
+      return res.status(409).json({ error: 'EMAIL_TAKEN', message: 'Cet email est déjà utilisé' });
     }
 
-    // Generate password if not provided
+    // Verify property belongs to org if provided
+    if (property_id) {
+      const property = await db('properties').where({ id: property_id, org_id: req.orgId }).first();
+      if (!property) {
+        return res.status(404).json({ error: 'NOT_FOUND', message: 'Logement introuvable' });
+      }
+      if (property.status === 'occupied') {
+        return res.status(409).json({ error: 'PROPERTY_OCCUPIED', message: 'Ce logement est déjà occupé' });
+      }
+    }
+
     const plainPassword = value.password || Math.random().toString(36).slice(-8) + 'A1!';
     const password_hash = await bcrypt.hash(plainPassword, 12);
 
-    const [tenant] = await db('users')
-      .insert({
+    const result = await db.transaction(async (trx) => {
+      const [tenant] = await trx('users').insert({
         org_id: req.orgId,
         email,
         password_hash,
         full_name,
         phone: phone || null,
         role: 'locataire',
-      })
-      .returning(['id', 'full_name', 'email', 'phone', 'role', 'created_at']);
+      }).returning(['id', 'full_name', 'email', 'phone', 'role', 'created_at']);
 
-    // Get org name for email
-    const org = await db('organizations').where({ id: req.orgId }).first();
+      let lease = null;
+      if (property_id) {
+        const property = await trx('properties').where({ id: property_id }).first();
+        const rent = monthly_rent || property.rent_amount;
 
-    // Send welcome email with credentials
-    sendWelcomeEmail({
-      to: email,
-      full_name,
-      role: 'locataire',
-      org_name: org?.name,
-      password: plainPassword,
-    }).catch(console.error);
+        const [newLease] = await trx('leases').insert({
+          org_id: req.orgId,
+          property_id,
+          tenant_id: tenant.id,
+          start_date: start_date || new Date(),
+          monthly_rent: rent,
+          deposit_amount: deposit_amount || 0,
+          status: 'active',
+        }).returning('*');
 
-    return res.status(201).json({
-      data: tenant,
-      temp_password: plainPassword,
+        await trx('properties').where({ id: property_id }).update({ status: 'occupied', updated_at: trx.fn.now() });
+        lease = newLease;
+      }
+
+      return { tenant, lease };
     });
+
+    const org = await db('organizations').where({ id: req.orgId }).first();
+    sendWelcomeEmail({ to: email, full_name, role: 'locataire', org_name: org?.name, password: plainPassword }).catch(console.error);
+
+    return res.status(201).json({ data: result.tenant, lease: result.lease, temp_password: plainPassword });
   } catch (err) {
     next(err);
   }
@@ -92,21 +105,11 @@ router.post('/tenants', requireAuth, requireRole('admin', 'gestionnaire'), async
 // DELETE /api/v1/users/tenants/:id
 router.delete('/tenants/:id', requireAuth, requireRole('admin'), async (req, res, next) => {
   try {
-    const tenant = await db('users')
-      .where({ id: req.params.id, org_id: req.orgId, role: 'locataire' })
-      .first();
-
+    const tenant = await db('users').where({ id: req.params.id, org_id: req.orgId, role: 'locataire' }).first();
     if (!tenant) {
-      return res.status(404).json({
-        error: 'NOT_FOUND',
-        message: 'Locataire introuvable',
-      });
+      return res.status(404).json({ error: 'NOT_FOUND', message: 'Locataire introuvable' });
     }
-
-    await db('users')
-      .where({ id: req.params.id, org_id: req.orgId })
-      .delete();
-
+    await db('users').where({ id: req.params.id, org_id: req.orgId }).delete();
     return res.status(204).send();
   } catch (err) {
     next(err);
