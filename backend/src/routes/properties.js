@@ -12,6 +12,7 @@ const propertySchema = Joi.object({
   surface_m2: Joi.number().positive().optional(),
   rent_amount: Joi.number().positive().required(),
   status: Joi.string().valid('available', 'occupied', 'maintenance').optional(),
+  type: Joi.string().valid('appartement', 'villa', 'magasin', 'bureau', 'entrepôt', 'autre').optional().default('appartement'),
 });
 
 const updatePropertySchema = Joi.object({
@@ -20,6 +21,7 @@ const updatePropertySchema = Joi.object({
   surface_m2: Joi.number().positive().optional(),
   rent_amount: Joi.number().positive().optional(),
   status: Joi.string().valid('available', 'occupied', 'maintenance').optional(),
+  type: Joi.string().valid('appartement', 'villa', 'magasin', 'bureau', 'entrepot', 'autre').optional(),
 }).min(1);
 
 // GET /api/v1/properties
