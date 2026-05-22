@@ -12,7 +12,7 @@ const sendLateRentReminders = async () => {
 
     // Find pending payments where due_date is more than 3 days ago
     const latePayments = await db('rent_payments')
-      .where({ status: 'pending' })
+      .where({ 'rent_payments.status': 'pending' })
       .where('due_date', '<=', threeDaysAgo)
       .join('leases', 'rent_payments.lease_id', 'leases.id')
       .join('properties', 'leases.property_id', 'properties.id')

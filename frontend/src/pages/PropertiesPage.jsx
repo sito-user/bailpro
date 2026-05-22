@@ -1,31 +1,58 @@
 import React from 'react';
 import { useState, useEffect } from 'react';
 import { getProperties, createProperty, deleteProperty } from '../api/properties';
-import { Plus, Trash2, Building2 } from 'lucide-react';
+import { Plus, Trash2, Building2, Search } from 'lucide-react';
 import './PropertiesPage.css';
 
 const EMPTY_FORM = {
-  address: '', district: '', surface_m2: '', rent_amount: '',
+  address: '', district: '', surface_m2: '', rent_amount: '', type: 'appartement',
+};
+
+const TYPE_LABELS = {
+  appartement: 'Appartement', villa: 'Villa', magasin: 'Magasin',
+  bureau: 'Bureau', entrepot: 'Entrepôt', autre: 'Autre',
 };
 
 export default function PropertiesPage() {
   const [properties, setProperties] = useState([]);
+  const [filtered, setFiltered] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const [showForm, setShowForm] = useState(false);
   const [form, setForm] = useState(EMPTY_FORM);
   const [saving, setSaving] = useState(false);
   const [formError, setFormError] = useState('');
+  const [search, setSearch] = useState('');
+  const [filterStatus, setFilterStatus] = useState('');
+  const [filterType, setFilterType] = useState('');
 
   const load = () => {
     setLoading(true);
     getProperties()
-      .then((res) => setProperties(res.data.data))
+      .then((res) => {
+        setProperties(res.data.data);
+        setFiltered(res.data.data);
+      })
       .catch(() => setError('Impossible de charger les logements'))
       .finally(() => setLoading(false));
   };
 
   useEffect(() => { load(); }, []);
+
+  // Filter logic
+  useEffect(() => {
+    let result = properties;
+    if (search) {
+      const s = search.toLowerCase();
+      result = result.filter(p =>
+        p.address.toLowerCase().includes(s) ||
+        (p.district && p.district.toLowerCase().includes(s))
+      );
+    }
+    if (filterStatus) result = result.filter(p => p.status === filterStatus);
+    if (filterType) result = result.filter(p => p.type === filterType);
+    setFiltered(result);
+  }, [search, filterStatus, filterType, properties]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -49,12 +76,8 @@ export default function PropertiesPage() {
 
   const handleDelete = async (id) => {
     if (!window.confirm('Supprimer ce logement ?')) return;
-    try {
-      await deleteProperty(id);
-      load();
-    } catch {
-      alert('Impossible de supprimer ce logement');
-    }
+    try { await deleteProperty(id); load(); }
+    catch { alert('Impossible de supprimer ce logement'); }
   };
 
   return (
@@ -62,17 +85,41 @@ export default function PropertiesPage() {
       <div className="page-header">
         <div>
           <h1 className="page-title">Logements</h1>
-          <p className="page-subtitle">{properties.length} logement(s) enregistré(s)</p>
+          <p className="page-subtitle">{filtered.length} logement(s) affiché(s)</p>
         </div>
         <button className="btn btn--primary" onClick={() => setShowForm(!showForm)}>
           <Plus size={16} /> Ajouter
         </button>
       </div>
 
+      {/* Search & Filters */}
+      <div className="filters-bar">
+        <div className="search-input-wrap">
+          <Search size={15} className="search-icon" />
+          <input className="form-input search-input" type="text"
+            placeholder="Rechercher par adresse ou quartier..."
+            value={search} onChange={(e) => setSearch(e.target.value)} />
+        </div>
+        <select className="form-input filter-select"
+          value={filterStatus} onChange={(e) => setFilterStatus(e.target.value)}>
+          <option value="">Tous les statuts</option>
+          <option value="available">Disponible</option>
+          <option value="occupied">Occupé</option>
+          <option value="maintenance">Maintenance</option>
+        </select>
+        <select className="form-input filter-select"
+          value={filterType} onChange={(e) => setFilterType(e.target.value)}>
+          <option value="">Tous les types</option>
+          {Object.entries(TYPE_LABELS).map(([k, v]) => (
+            <option key={k} value={k}>{v}</option>
+          ))}
+        </select>
+      </div>
+
       {/* Form */}
       {showForm && (
         <div className="card form-card">
-          <h2 className="card__title">Nouveau logement</h2>
+          <h2 className="card__title">Nouveau bien immobilier</h2>
           <form className="prop-form" onSubmit={handleSubmit}>
             {formError && <div className="auth-form__error">{formError}</div>}
             <div className="form-row">
@@ -94,20 +141,30 @@ export default function PropertiesPage() {
             </div>
             <div className="form-row">
               <div className="form-group">
+                <label className="form-label">Type de bien</label>
+                <select className="form-input"
+                  value={form.type}
+                  onChange={(e) => setForm({ ...form, type: e.target.value })}>
+                  {Object.entries(TYPE_LABELS).map(([k, v]) => (
+                    <option key={k} value={k}>{v}</option>
+                  ))}
+                </select>
+              </div>
+              <div className="form-group">
                 <label className="form-label">Surface (m²)</label>
                 <input className="form-input" type="number" min="1"
                   placeholder="75"
                   value={form.surface_m2}
                   onChange={(e) => setForm({ ...form, surface_m2: e.target.value })} />
               </div>
-              <div className="form-group">
-                <label className="form-label">Loyer mensuel (FCFA) *</label>
-                <input className="form-input" type="number" min="1"
-                  placeholder="150000"
-                  value={form.rent_amount}
-                  onChange={(e) => setForm({ ...form, rent_amount: e.target.value })}
-                  required />
-              </div>
+            </div>
+            <div className="form-group">
+              <label className="form-label">Loyer mensuel (FCFA) *</label>
+              <input className="form-input" type="number" min="1"
+                placeholder="150000"
+                value={form.rent_amount}
+                onChange={(e) => setForm({ ...form, rent_amount: e.target.value })}
+                required />
             </div>
             <div className="form-actions">
               <button type="button" className="btn btn--secondary"
@@ -127,10 +184,10 @@ export default function PropertiesPage() {
         <div className="page-status">Chargement...</div>
       ) : error ? (
         <div className="page-status page-status--error">{error}</div>
-      ) : properties.length === 0 ? (
+      ) : filtered.length === 0 ? (
         <div className="empty-state">
           <Building2 size={32} color="var(--color-gray-300)" />
-          <p>Aucun logement enregistré</p>
+          <p>Aucun logement trouvé</p>
         </div>
       ) : (
         <div className="card">
@@ -138,6 +195,7 @@ export default function PropertiesPage() {
             <thead>
               <tr>
                 <th>Adresse</th>
+                <th>Type</th>
                 <th>Quartier</th>
                 <th>Surface</th>
                 <th>Loyer</th>
@@ -146,9 +204,10 @@ export default function PropertiesPage() {
               </tr>
             </thead>
             <tbody>
-              {properties.map((p) => (
+              {filtered.map((p) => (
                 <tr key={p.id}>
                   <td className="td--address">{p.address}</td>
+                  <td><span className="badge badge--type">{TYPE_LABELS[p.type] || 'Appartement'}</span></td>
                   <td>{p.district || '—'}</td>
                   <td>{p.surface_m2 ? `${p.surface_m2} m²` : '—'}</td>
                   <td className="td--amount">
@@ -161,8 +220,7 @@ export default function PropertiesPage() {
                     </span>
                   </td>
                   <td>
-                    <button className="icon-btn icon-btn--danger"
-                      onClick={() => handleDelete(p.id)}>
+                    <button className="icon-btn icon-btn--danger" onClick={() => handleDelete(p.id)}>
                       <Trash2 size={15} />
                     </button>
                   </td>
