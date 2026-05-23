@@ -1,0 +1,76 @@
+.tenant-profile { max-width: 800px; }
+
+.profile-card {
+  background: var(--color-white);
+  border: 1px solid var(--color-gray-200);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
+  margin-bottom: 16px;
+  overflow: hidden;
+}
+
+.profile-card__header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 14px 20px;
+  background: var(--color-gray-50);
+  border-bottom: 1px solid var(--color-gray-100);
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--color-gray-700);
+}
+
+.profile-card__body { padding: 20px; }
+.profile-card__body--no-padding { padding: 0; }
+
+.profile-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+.profile-item { display: flex; flex-direction: column; gap: 4px; }
+.profile-label { font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; color: var(--color-gray-400); }
+.profile-value { font-size: 14px; font-weight: 500; color: var(--color-gray-900); }
+
+.lease-row {
+  border: 1px solid var(--color-gray-200);
+  border-radius: var(--radius-md);
+  padding: 16px;
+  margin-bottom: 12px;
+}
+
+.lease-row:last-child { margin-bottom: 0; }
+
+.lease-row__address {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--color-gray-900);
+  display: block;
+  margin-bottom: 6px;
+}
+
+.lease-row__details {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+  margin-top: 12px;
+  padding-top: 12px;
+  border-top: 1px solid var(--color-gray-100);
+}
+
+.badge--priority-urgent { background: #fef2f2; color: #dc2626; }
+.badge--priority-high { background: #fef9c3; color: #b45309; }
+.badge--priority-medium { background: #ede9fe; color: #6d28d9; }
+.badge--priority-low { background: #f4f4f5; color: #71717a; }
+
+.badge--status-open { background: #fef2f2; color: #dc2626; }
+.badge--status-in_progress { background: #fef9c3; color: #b45309; }
+.badge--status-resolved { background: #dcfce7; color: #16a34a; }
+.badge--status-closed { background: #f4f4f5; color: #71717a; }
+
+@media (max-width: 640px) {
+  .profile-grid { grid-template-columns: 1fr; }
+  .lease-row__details { grid-template-columns: 1fr; }
+}

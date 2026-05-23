@@ -3,6 +3,7 @@ import { getTenants, createTenant, deleteTenant } from '../api/users';
 import { getProperties } from '../api/properties';
 import { Plus, Trash2, Users, Copy, Check } from 'lucide-react';
 import './TenantsManager.css';
+import { Link } from 'react-router-dom';
 
 const EMPTY_FORM = { full_name: '', email: '', phone: '', password: '', property_id: '', start_date: '', monthly_rent: '', deposit_amount: '' };
 
@@ -213,6 +214,11 @@ export default function TenantsManager() {
                     <button className="icon-btn icon-btn--danger" onClick={() => handleDelete(t.id)}>
                       <Trash2 size={15} />
                     </button>
+                  </td>*
+                  <td>
+                    <Link to={`/app/tenants/${t.id}`} className="btn btn--secondary btn--sm">
+                      Voir profil
+                    </Link>
                   </td>
                 </tr>
               ))}

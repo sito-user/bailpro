@@ -16,6 +16,7 @@ import WelcomePage from './pages/WelcomePage';
 import AiAssistantPage from './pages/AiAssistant';
 import TenantsManagerPage from './pages/TenantsManager';
 import PaymentCalendarPage from './pages/PaymentCalendar';
+import TenantProfilePage from './pages/TenantProfile';
 
 const ProtectedRoute = ({ children }) => {
   const { user, loading } = useAuth();
@@ -54,6 +55,7 @@ const AppRoutes = () => (
       <Route path="ai" element={<AiAssistantPage />} />
       <Route path="tenants" element={<TenantsManagerPage />} />
       <Route path="calendar" element={<PaymentCalendarPage />} />
+      <Route path="tenants/:id" element={<TenantProfilePage />} />
     </Route>
     <Route path="/receipt/:paymentId" element={<ProtectedRoute><ReceiptViewPage /></ProtectedRoute>} />
     <Route path="*" element={<Navigate to="/" replace />} />
