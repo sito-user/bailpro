@@ -2,7 +2,13 @@ const jwt = require('jsonwebtoken');
 const { JWT_SECRET } = require('../config/env');
 
 const requireAuth = (req, res, next) => {
-  const token = req.cookies?.token;
+  // Accept token from cookie OR Authorization header (for iOS Safari)
+  const cookieToken = req.cookies?.token;
+  const bearerToken = req.headers.authorization?.startsWith('Bearer ')
+    ? req.headers.authorization.split(' ')[1]
+    : null;
+
+  const token = cookieToken || bearerToken;
 
   if (!token) {
     return res.status(401).json({

@@ -22,6 +22,7 @@ export default function LoginPage() {
     try {
       const res = await login({ identifier: form.email, password: form.password });
       const user = res.data.user;
+      if (res.data.token) localStorage.setItem('token', res.data.token);
 
       if (isTenant && user.role !== 'locataire') {
         setError("Ce compte n'est pas un compte locataire. Veuillez utiliser l'espace bailleur.");

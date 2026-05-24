@@ -68,10 +68,13 @@ router.post('/register', async (req, res, next) => {
       to: email, full_name, role: 'admin', org_name,
     }).catch(console.error);
 
-    return res.status(201).json({ user: result.user, org: result.org });
+    return res.status(201).json({ user: result.user, org: result.org, 
+      token,
+    });
   } catch (err) {
     next(err);
   }
+  
 });
 
 // POST /api/v1/auth/login
@@ -109,6 +112,7 @@ router.post('/login', async (req, res, next) => {
 
     return res.status(200).json({
       user: { id: user.id, org_id: user.org_id, email: user.email, full_name: user.full_name, role: user.role, phone: user.phone },
+      token,
     });
   } catch (err) {
     next(err);

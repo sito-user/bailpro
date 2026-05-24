@@ -16,10 +16,11 @@ export const AuthProvider = ({ children }) => {
   }, []);
 
   const logout = async () => {
-    await logoutApi();
-    setUser(null);
-    window.location.href = '/login';
-  };
+  localStorage.removeItem('token');
+  await logoutApi().catch(() => {});
+  setUser(null);
+  window.location.href = '/';
+};
 
   return (
     <AuthContext.Provider value={{ user, setUser, loading, logout }}>
