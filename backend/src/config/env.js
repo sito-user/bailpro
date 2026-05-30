@@ -1,6 +1,6 @@
 require('dotenv').config();
 
-const required = ['JWT_SECRET', 'DATABASE_URL', 'FRONTEND_URL'];
+const required = ['JWT_SECRET', 'DATABASE_URL'];
 
 for (const key of required) {
   if (!process.env[key]) {
