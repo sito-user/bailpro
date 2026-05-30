@@ -16,8 +16,8 @@ router.get('/', requireAuth, requireRole('admin', 'gestionnaire'), async (req, r
     threeDaysAgo.setDate(threeDaysAgo.getDate() - 3);
 
     const latePayments = await db('rent_payments')
-      .where({ org_id: orgId, status: 'pending' })
-      .where('due_date', '<=', threeDaysAgo)
+      .where({ 'rent_payments.org_id': orgId, 'rent_payments.status': 'pending' })
+      .where('rent_payments.due_date', '<=', threeDaysAgo)
       .join('leases', 'rent_payments.lease_id', 'leases.id')
       .join('users', 'leases.tenant_id', 'users.id')
       .join('properties', 'leases.property_id', 'properties.id')
@@ -46,8 +46,8 @@ router.get('/', requireAuth, requireRole('admin', 'gestionnaire'), async (req, r
     sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);
 
     const newMaintenance = await db('maintenance_requests')
-      .where({ org_id: orgId, status: 'open' })
-      .where('created_at', '>=', sevenDaysAgo)
+      .where({ 'maintenance_requests.org_id': orgId, 'maintenance_requests.status': 'open' })
+      .where('maintenance_requests.created_at', '>=', sevenDaysAgo)
       .join('users', 'maintenance_requests.tenant_id', 'users.id')
       .join('properties', 'maintenance_requests.property_id', 'properties.id')
       .select(

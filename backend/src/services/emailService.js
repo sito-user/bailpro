@@ -1,18 +1,13 @@
-const nodemailer = require('nodemailer');
+const { Resend } = require('resend');
 
-const transporter = nodemailer.createTransport({
-  service: 'gmail',
-  auth: {
-    user: process.env.EMAIL_USER,
-    pass: process.env.EMAIL_PASSWORD,
-  },
-});
+const resend = new Resend(process.env.RESEND_API_KEY);
+const FROM = process.env.EMAIL_FROM || 'BailPro <onboarding@resend.dev>';
 
 /**
  * Send welcome email to new user
  */
 const sendWelcomeEmail = async ({ to, full_name, role, org_name, password }) => {
-  if (!process.env.EMAIL_USER || !process.env.EMAIL_PASSWORD) return;
+  if (!process.env.RESEND_API_KEY) return;
 
   const isLocataire = role === 'locataire';
 
@@ -60,8 +55,8 @@ const sendWelcomeEmail = async ({ to, full_name, role, org_name, password }) => 
     </div>
   `;
 
-  await transporter.sendMail({
-    from: `"BailPro" <${process.env.EMAIL_USER}>`,
+  await resend.emails.send({
+    from: FROM,
     to,
     subject: `Bienvenue sur BailPro${org_name ? ` — ${org_name}` : ''}`,
     html,
@@ -72,7 +67,7 @@ const sendWelcomeEmail = async ({ to, full_name, role, org_name, password }) => 
  * Send late rent notification
  */
 const sendLateRentEmail = async ({ to, full_name, property_address, amount, due_date }) => {
-  if (!process.env.EMAIL_USER || !process.env.EMAIL_PASSWORD) return;
+  if (!process.env.RESEND_API_KEY) return;
 
   const formatAmount = (n) => new Intl.NumberFormat('fr-FR').format(n) + ' FCFA';
   const formatDate = (d) => new Date(d).toLocaleDateString('fr-FR');
@@ -121,8 +116,8 @@ const sendLateRentEmail = async ({ to, full_name, property_address, amount, due_
     </div>
   `;
 
-  await transporter.sendMail({
-    from: `"BailPro" <${process.env.EMAIL_USER}>`,
+  await resend.emails.send({
+    from: FROM,
     to,
     subject: `⚠ Rappel : Loyer en retard — ${formatAmount(amount)}`,
     html,

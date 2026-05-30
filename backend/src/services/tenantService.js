@@ -68,13 +68,15 @@ const createTenant = async ({ orgId, full_name, email, phone, property_id, start
   });
 
   const org = await db('organizations').where({ id: orgId }).first();
+  const pino = require('pino');
+  const logger = pino({ level: 'info' });
   sendWelcomeEmail({
     to: email,
     full_name,
     role: 'locataire',
     org_name: org?.name,
     password: plainPassword,
-  }).catch(() => {});
+  }).catch((err) => logger.error({ err: err.message }, 'Welcome email failed'));
 
   return { tenant: result.tenant, lease: result.lease, plainPassword };
 };
