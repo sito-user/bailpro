@@ -64,7 +64,7 @@ router.post('/', requireAuth, async (req, res, next) => {
       receipt = await generateReceipt(payment.id, req.orgId);
     } catch (receiptErr) {
       // Receipt generation failure should not block the payment
-      console.error('Receipt generation failed:', receiptErr.message);
+      // receipt generation failure does not block the payment
     }
 
     return res.status(201).json({

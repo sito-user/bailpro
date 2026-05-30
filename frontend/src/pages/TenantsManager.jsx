@@ -214,7 +214,7 @@ export default function TenantsManager() {
                     <button className="icon-btn icon-btn--danger" onClick={() => handleDelete(t.id)}>
                       <Trash2 size={15} />
                     </button>
-                  </td>*
+                  </td>
                   <td>
                     <Link to={`/app/tenants/${t.id}`} className="btn btn--secondary btn--sm">
                       Voir profil

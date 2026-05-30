@@ -12,7 +12,7 @@ const propertySchema = Joi.object({
   surface_m2: Joi.number().positive().optional(),
   rent_amount: Joi.number().positive().required(),
   status: Joi.string().valid('available', 'occupied', 'maintenance').optional(),
-  type: Joi.string().valid('appartement', 'villa', 'magasin', 'bureau', 'entrepôt', 'autre').optional().default('appartement'),
+  type: Joi.string().valid('appartement', 'villa', 'magasin', 'bureau', 'entrepot', 'autre').optional().default('appartement'),
 });
 
 const updatePropertySchema = Joi.object({
@@ -89,9 +89,8 @@ router.post('/', requireAuth, requireRole('admin', 'gestionnaire'), async (req, 
 
     return res.status(201).json({ data: property });
   } catch (err) {
-  console.log('PROPERTY ERROR:', err.message);
-  next(err);
-}
+    next(err);
+  }
 });
 
 // PATCH /api/v1/properties/:id

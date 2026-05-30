@@ -66,7 +66,7 @@ router.post('/register', async (req, res, next) => {
 
     sendWelcomeEmail({
       to: email, full_name, role: 'admin', org_name,
-    }).catch(console.error);
+    }).catch(() => {});
 
     return res.status(201).json({ user: result.user, org: result.org, 
       token,

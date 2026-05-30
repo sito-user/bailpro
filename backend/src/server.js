@@ -86,9 +86,10 @@ app.use(errorHandler);
 
 // Start server only if not in test mode
 if (process.env.NODE_ENV !== 'test') {
+  const pino = require('pino');
+  const logger = pino({ level: process.env.LOG_LEVEL || 'info' });
   app.listen(PORT, () => {
-    console.log(`BailPro API running on port ${PORT}`);
-    // Start daily scheduler
+    logger.info({ port: PORT }, 'BailPro API running');
     const { startScheduler } = require('./scripts/scheduler');
     startScheduler();
   });

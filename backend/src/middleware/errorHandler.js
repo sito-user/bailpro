@@ -1,12 +1,13 @@
-// Global error handler middleware
+const pino = require('pino');
+const logger = pino({ level: process.env.LOG_LEVEL || 'info' });
+
 const errorHandler = (err, req, res, next) => {
   const status = err.status || err.statusCode || 500;
   const message = err.message || 'Internal server error';
   const code = err.code || 'INTERNAL_ERROR';
 
   if (process.env.NODE_ENV !== 'test') {
-    console.error(`[${req.method}] ${req.path} - ${status} - ${message}`);
-    if (err.stack) console.error(err.stack);
+    logger.error({ method: req.method, path: req.path, status, stack: err.stack }, message);
   }
 
   res.status(status).json({

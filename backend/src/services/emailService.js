@@ -11,7 +11,7 @@ const transporter = nodemailer.createTransport({
 /**
  * Send welcome email to new user
  */
-const sendWelcomeEmail = async ({ to, full_name, role, org_name }) => {
+const sendWelcomeEmail = async ({ to, full_name, role, org_name, password }) => {
   if (!process.env.EMAIL_USER || !process.env.EMAIL_PASSWORD) return;
 
   const isLocataire = role === 'locataire';
@@ -29,19 +29,30 @@ const sendWelcomeEmail = async ({ to, full_name, role, org_name }) => {
             : `Votre espace de gestion locative <strong>${org_name}</strong> a été créé avec succès.`
           }
         </p>
-        <p style="color: #52525b; line-height: 1.6;">
-          Vous pouvez maintenant vous connecter sur :
-          <a href="https://bailpro-frontend.onrender.com" style="color: #0a0a0a; font-weight: bold;">
-            bailpro-frontend.onrender.com
-          </a>
-        </p>
-        ${isLocataire ? `
-        <div style="background: #f4f4f5; padding: 16px; border-radius: 8px; margin: 24px 0;">
-          <p style="margin: 0; color: #52525b; font-size: 14px;">
-            Connectez-vous via <strong>Espace Locataire</strong> avec votre email et mot de passe.
+        ${isLocataire && password ? `
+        <div style="background: #f4f4f5; padding: 20px; border-radius: 8px; margin: 24px 0; border-left: 4px solid #0a0a0a;">
+          <p style="margin: 0 0 12px 0; color: #0a0a0a; font-weight: bold;">Vos identifiants de connexion :</p>
+          <table style="width: 100%;">
+            <tr>
+              <td style="color: #71717a; padding: 4px 0; width: 120px;">Email</td>
+              <td style="color: #0a0a0a; font-weight: bold;">${to}</td>
+            </tr>
+            <tr>
+              <td style="color: #71717a; padding: 4px 0;">Mot de passe</td>
+              <td style="color: #0a0a0a; font-weight: bold; font-family: monospace; font-size: 16px;">${password}</td>
+            </tr>
+          </table>
+          <p style="margin: 12px 0 0 0; color: #71717a; font-size: 12px;">
+            Pensez à changer votre mot de passe après votre première connexion.
           </p>
         </div>
         ` : ''}
+        <p style="color: #52525b; line-height: 1.6;">
+          Connectez-vous sur :
+          <a href="${process.env.FRONTEND_URL}" style="color: #0a0a0a; font-weight: bold;">
+            ${process.env.FRONTEND_URL}
+          </a>
+        </p>
       </div>
       <div style="padding: 16px; text-align: center; color: #a1a1aa; font-size: 12px;">
         BailPro — Gestion locative simplifiée pour Abidjan
@@ -98,7 +109,7 @@ const sendLateRentEmail = async ({ to, full_name, property_address, amount, due_
           Veuillez régulariser votre situation en vous connectant sur BailPro.
         </p>
         <div style="text-align: center; margin: 24px 0;">
-          <a href="https://bailpro-frontend.onrender.com"
+          <a href="${process.env.FRONTEND_URL}"
              style="background: #0a0a0a; color: white; padding: 12px 24px; border-radius: 8px; text-decoration: none; font-weight: bold;">
             Payer maintenant
           </a>
