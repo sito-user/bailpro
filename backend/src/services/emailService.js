@@ -1,13 +1,14 @@
 const { Resend } = require('resend');
 
-const resend = new Resend(process.env.RESEND_API_KEY);
-const FROM = process.env.EMAIL_FROM || 'BailPro <onboarding@resend.dev>';
+const getClient = () => new Resend(process.env.RESEND_API_KEY);
+const FROM = () => process.env.EMAIL_FROM || 'BailPro <onboarding@resend.dev>';
 
 /**
  * Send welcome email to new user
  */
 const sendWelcomeEmail = async ({ to, full_name, role, org_name, password }) => {
   if (!process.env.RESEND_API_KEY) return;
+  const resend = getClient();
 
   const isLocataire = role === 'locataire';
 
@@ -56,7 +57,7 @@ const sendWelcomeEmail = async ({ to, full_name, role, org_name, password }) => 
   `;
 
   await resend.emails.send({
-    from: FROM,
+    from: FROM(),
     to,
     subject: `Bienvenue sur BailPro${org_name ? ` — ${org_name}` : ''}`,
     html,
@@ -68,6 +69,7 @@ const sendWelcomeEmail = async ({ to, full_name, role, org_name, password }) => 
  */
 const sendLateRentEmail = async ({ to, full_name, property_address, amount, due_date }) => {
   if (!process.env.RESEND_API_KEY) return;
+  const resend = getClient();
 
   const formatAmount = (n) => new Intl.NumberFormat('fr-FR').format(n) + ' FCFA';
   const formatDate = (d) => new Date(d).toLocaleDateString('fr-FR');
@@ -117,7 +119,7 @@ const sendLateRentEmail = async ({ to, full_name, property_address, amount, due_
   `;
 
   await resend.emails.send({
-    from: FROM,
+    from: FROM(),
     to,
     subject: `⚠ Rappel : Loyer en retard — ${formatAmount(amount)}`,
     html,
