@@ -7,6 +7,11 @@ import { Link } from 'react-router-dom';
 
 const EMPTY_FORM = { full_name: '', email: '', phone: '', password: '', property_id: '', start_date: '', monthly_rent: '', deposit_amount: '' };
 
+const TYPE_LABELS = {
+  appartement: 'Appartement', villa: 'Villa', magasin: 'Magasin',
+  bureau: 'Bureau', entrepot: 'Entrepôt', autre: 'Autre',
+};
+
 export default function TenantsManager() {
   const [tenants, setTenants] = useState([]);
   const [properties, setProperties] = useState([]);
@@ -158,23 +163,35 @@ export default function TenantsManager() {
             </div>
 
             {form.property_id && (
-              <div className="form-row">
+              <>
                 <div className="form-group">
-                  <label className="form-label">Date de début *</label>
-                  <input className="form-input" type="date"
-                    value={form.start_date} onChange={(e) => setForm({ ...form, start_date: e.target.value })} />
+                  <label className="form-label">Type de location</label>
+                  <input
+                    className="form-input"
+                    type="text"
+                    value={TYPE_LABELS[selectedProperty?.type] || '—'}
+                    disabled
+                    style={{ background: '#f4f4f5', color: '#52525b' }}
+                  />
                 </div>
-                <div className="form-group">
-                  <label className="form-label">Loyer mensuel (FCFA)</label>
-                  <input className="form-input" type="number"
-                    value={form.monthly_rent} onChange={(e) => setForm({ ...form, monthly_rent: e.target.value })} />
+                <div className="form-row">
+                  <div className="form-group">
+                    <label className="form-label">Date de début *</label>
+                    <input className="form-input" type="date"
+                      value={form.start_date} onChange={(e) => setForm({ ...form, start_date: e.target.value })} />
+                  </div>
+                  <div className="form-group">
+                    <label className="form-label">Loyer mensuel (FCFA)</label>
+                    <input className="form-input" type="number"
+                      value={form.monthly_rent} onChange={(e) => setForm({ ...form, monthly_rent: e.target.value })} />
+                  </div>
+                  <div className="form-group">
+                    <label className="form-label">Caution (FCFA)</label>
+                    <input className="form-input" type="number" placeholder="0"
+                      value={form.deposit_amount} onChange={(e) => setForm({ ...form, deposit_amount: e.target.value })} />
+                  </div>
                 </div>
-                <div className="form-group">
-                  <label className="form-label">Caution (FCFA)</label>
-                  <input className="form-input" type="number" placeholder="0"
-                    value={form.deposit_amount} onChange={(e) => setForm({ ...form, deposit_amount: e.target.value })} />
-                </div>
-              </div>
+              </>
             )}
 
             <div className="form-actions">

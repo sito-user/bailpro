@@ -63,6 +63,15 @@ router.delete('/tenants/:id', requireAuth, requireRole('admin'), async (req, res
     if (!tenant) {
       return res.status(404).json({ error: 'NOT_FOUND', message: 'Locataire introuvable' });
     }
+
+    const activeLease = await db('leases').where({ tenant_id: req.params.id, status: 'active' }).first();
+    if (activeLease) {
+      return res.status(409).json({
+        error: 'LEASE_ACTIVE',
+        message: 'Impossible de supprimer un locataire avec un bail actif. Résiliez d\'abord le bail.',
+      });
+    }
+
     await db('users').where({ id: req.params.id, org_id: req.orgId }).delete();
     return res.status(204).send();
   } catch (err) {

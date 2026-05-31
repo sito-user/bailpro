@@ -15,7 +15,7 @@ export default function AiAssistant() {
   const [messages, setMessages] = useState([
     {
       role: 'assistant',
-      content: 'Bonjour ! Je suis votre assistant BailPro. Posez-moi des questions sur vos logements, locataires, paiements ou demandes de maintenance.',
+      content: 'Bonjour ! Je suis Wari, votre assistant immobilier intelligent. Posez-moi des questions sur vos logements, locataires, paiements ou demandes de maintenance.',
     },
   ]);
   const [input, setInput] = useState('');
@@ -58,9 +58,9 @@ export default function AiAssistant() {
         <div>
           <h1 className="page-title">
             <Sparkles size={20} style={{ marginRight: 8, verticalAlign: 'middle' }} />
-            Assistant IA
+            Wari
           </h1>
-          <p className="page-subtitle">Posez des questions sur votre parc locatif</p>
+          <p className="page-subtitle">Votre assistant immobilier intelligent</p>
         </div>
       </div>
 

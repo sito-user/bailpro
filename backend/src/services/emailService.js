@@ -1,14 +1,23 @@
-const { Resend } = require('resend');
+const nodemailer = require('nodemailer');
 
-const getClient = () => new Resend(process.env.RESEND_API_KEY);
-const FROM = () => process.env.EMAIL_FROM || 'BailPro <onboarding@resend.dev>';
+const getTransporter = () => nodemailer.createTransport({
+  host: 'smtp-relay.brevo.com',
+  port: 587,
+  secure: false,
+  auth: {
+    user: process.env.BREVO_SMTP_LOGIN,
+    pass: process.env.BREVO_SMTP_PASSWORD,
+  },
+});
+
+const FROM = () => process.env.EMAIL_FROM || 'BailPro <bailpro.app.ci@gmail.com>';
 
 /**
  * Send welcome email to new user
  */
 const sendWelcomeEmail = async ({ to, full_name, role, org_name, password }) => {
-  if (!process.env.RESEND_API_KEY) return;
-  const resend = getClient();
+  if (!process.env.BREVO_SMTP_LOGIN || !process.env.BREVO_SMTP_PASSWORD) return;
+  const transporter = getTransporter();
 
   const isLocataire = role === 'locataire';
 
@@ -56,7 +65,7 @@ const sendWelcomeEmail = async ({ to, full_name, role, org_name, password }) => 
     </div>
   `;
 
-  await resend.emails.send({
+  await transporter.sendMail({
     from: FROM(),
     to,
     subject: `Bienvenue sur BailPro${org_name ? ` — ${org_name}` : ''}`,
@@ -68,8 +77,8 @@ const sendWelcomeEmail = async ({ to, full_name, role, org_name, password }) => 
  * Send late rent notification
  */
 const sendLateRentEmail = async ({ to, full_name, property_address, amount, due_date }) => {
-  if (!process.env.RESEND_API_KEY) return;
-  const resend = getClient();
+  if (!process.env.BREVO_SMTP_LOGIN || !process.env.BREVO_SMTP_PASSWORD) return;
+  const transporter = getTransporter();
 
   const formatAmount = (n) => new Intl.NumberFormat('fr-FR').format(n) + ' FCFA';
   const formatDate = (d) => new Date(d).toLocaleDateString('fr-FR');
@@ -118,7 +127,7 @@ const sendLateRentEmail = async ({ to, full_name, property_address, amount, due_
     </div>
   `;
 
-  await resend.emails.send({
+  await transporter.sendMail({
     from: FROM(),
     to,
     subject: `⚠ Rappel : Loyer en retard — ${formatAmount(amount)}`,
