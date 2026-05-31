@@ -3,7 +3,7 @@ import { Outlet, NavLink } from 'react-router-dom';
 import { useAuth } from '../hooks/useAuth';
 import NotificationBell from './NotificationBell';
 import {
-  LayoutDashboard, Building2, FileText, Wrench,
+  LayoutDashboard, Building2, Wrench,
   LogOut, Menu, X, Home, Receipt, ClipboardList, Sparkles, UserPlus, Calendar
 } from 'lucide-react';
 import './Layout.css';
@@ -11,12 +11,10 @@ import './Layout.css';
 const adminNavItems = [
   { to: '/app/dashboard', icon: LayoutDashboard, label: 'Tableau de bord' },
   { to: '/app/properties', icon: Building2, label: 'Logements' },
-  { to: '/app/leases', icon: FileText, label: 'Baux' },
-  { to: '/app/maintenance', icon: Wrench, label: 'Maintenance' },
-  { to: '/app/ai', icon: Sparkles, label: 'Assistant IA' },
   { to: '/app/tenants', icon: UserPlus, label: 'Locataires' },
+  { to: '/app/maintenance', icon: Wrench, label: 'Maintenance' },
   { to: '/app/calendar', icon: Calendar, label: 'Calendrier' },
-
+  { to: '/app/ai', icon: Sparkles, label: 'Wari' },
 ];
 
 const tenantNavItems = [

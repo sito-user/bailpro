@@ -6,7 +6,6 @@ import LoginPage from './pages/LoginPage';
 import RegisterPage from './pages/RegisterPage';
 import DashboardPage from './pages/DashboardPage';
 import PropertiesPage from './pages/PropertiesPage';
-import LeasesPage from './pages/LeasesPage';
 import MaintenancePage from './pages/MaintenancePage';
 import TenantPortalPage from './pages/TenantPortal';
 import MyReceiptsPage from './pages/MyReceipts';
@@ -47,7 +46,6 @@ const AppRoutes = () => (
       <Route index element={<RedirectByRole />} />
       <Route path="dashboard" element={<DashboardPage />} />
       <Route path="properties" element={<PropertiesPage />} />
-      <Route path="leases" element={<LeasesPage />} />
       <Route path="maintenance" element={<MaintenancePage />} />
       <Route path="tenant" element={<TenantPortalPage />} />
       <Route path="my-receipts" element={<MyReceiptsPage />} />

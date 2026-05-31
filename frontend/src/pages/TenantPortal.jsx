@@ -1,10 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { useAuth } from '../hooks/useAuth';
 import { getLeases, getLeasePayments } from '../api/leases';
-import { createPayment } from '../api/payments';
-import { Home, CreditCard, FileText, CheckCircle, AlertCircle } from 'lucide-react';
+import { Home, CreditCard, FileText } from 'lucide-react';
+import { Link } from 'react-router-dom';
 import './TenantPortal.css';
-import PaymentModal from '../components/PaymentModal';
 
 export default function TenantPortal() {
   const { user } = useAuth();
@@ -12,8 +11,6 @@ export default function TenantPortal() {
   const [payments, setPayments] = useState({});
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
-  const [paying, setPaying] = useState(null);
-  const [payingLease, setPayingLease] = useState(null);
 
   const load = async () => {
     setLoading(true);
@@ -38,25 +35,6 @@ export default function TenantPortal() {
 
   useEffect(() => { load(); }, []);
 
-  const handlePay = async (lease) => {
-    setPaying(lease.id);
-    try {
-      const today = new Date().toISOString().split('T')[0];
-      await createPayment({
-        lease_id: lease.id,
-        amount: lease.monthly_rent,
-        due_date: today,
-        payment_method: 'mobile_money_mock',
-      });
-      alert('Paiement effectué ! Votre quittance a été générée.');
-      load();
-    } catch (err) {
-      alert(err.response?.data?.message || 'Erreur lors du paiement');
-    } finally {
-      setPaying(null);
-    }
-  };
-
   const formatAmount = (n) => new Intl.NumberFormat('fr-FR').format(n) + ' FCFA';
   const formatDate = (d) => new Date(d).toLocaleDateString('fr-FR');
 
@@ -65,13 +43,6 @@ export default function TenantPortal() {
 
   return (
     <div className="tenant-portal">
-      {payingLease && (
-        <PaymentModal
-          lease={payingLease}
-          onClose={() => setPayingLease(null)}
-          onSuccess={() => { setPayingLease(null); load(); }}
-        />
-      )}
       <div className="page-header">
         <h1 className="page-title">Bonjour, {user?.full_name}</h1>
         <p className="page-subtitle">Votre espace locataire</p>
@@ -122,13 +93,13 @@ export default function TenantPortal() {
                     <div className="payment-status__info">
                       <span className="payment-status__amount">{formatAmount(lease.monthly_rent)}</span>
                       <span className={`badge badge--${isPaid ? 'available' : 'unpaid'}`}>
-                        {isPaid ? 'Paye' : 'En attente'}
+                        {isPaid ? 'Payé' : 'En attente'}
                       </span>
                     </div>
-                    {!isPaid && (
-                      <button className="btn btn--primary" onClick={() => setPayingLease(lease)}>
-                        💳Payer le loyer
-                      </button>
+                    {isPaid && (
+                      <Link to="/tenant/receipts" className="btn btn--secondary btn--sm">
+                        📄 Voir mes quittances
+                      </Link>
                     )}
                   </div>
                 </div>

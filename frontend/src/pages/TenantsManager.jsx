@@ -1,7 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { getTenants, createTenant, deleteTenant } from '../api/users';
 import { getProperties } from '../api/properties';
-import { Plus, Trash2, Users, Copy, Check } from 'lucide-react';
+import { getLeases } from '../api/leases';
+import { createPayment } from '../api/payments';
+import { Plus, Trash2, Users, Copy, Check, CreditCard } from 'lucide-react';
+import PaymentModal from '../components/PaymentModal';
 import './TenantsManager.css';
 import { Link } from 'react-router-dom';
 
@@ -23,13 +26,16 @@ export default function TenantsManager() {
   const [formError, setFormError] = useState('');
   const [newCredentials, setNewCredentials] = useState(null);
   const [copied, setCopied] = useState(false);
+  const [leases, setLeases] = useState([]);
+  const [payingLease, setPayingLease] = useState(null);
 
   const load = () => {
     setLoading(true);
-    Promise.all([getTenants(), getProperties()])
-      .then(([tRes, pRes]) => {
+    Promise.all([getTenants(), getProperties(), getLeases()])
+      .then(([tRes, pRes, lRes]) => {
         setTenants(tRes.data.data);
         setProperties(pRes.data.data.filter(p => p.status === 'available'));
+        setLeases(lRes.data.data.filter(l => l.status === 'active'));
       })
       .catch(() => setError('Impossible de charger les données'))
       .finally(() => setLoading(false));
@@ -82,6 +88,13 @@ export default function TenantsManager() {
 
   return (
     <div className="tenants-manager">
+      {payingLease && (
+        <PaymentModal
+          lease={payingLease}
+          onClose={() => setPayingLease(null)}
+          onSuccess={() => { setPayingLease(null); load(); }}
+        />
+      )}
       <div className="page-header">
         <div>
           <h1 className="page-title">Locataires</h1>
@@ -227,15 +240,19 @@ export default function TenantsManager() {
                   <td>{t.email}</td>
                   <td>{t.phone || '—'}</td>
                   <td>{new Date(t.created_at).toLocaleDateString('fr-FR')}</td>
-                  <td>
-                    <button className="icon-btn icon-btn--danger" onClick={() => handleDelete(t.id)}>
-                      <Trash2 size={15} />
-                    </button>
-                  </td>
-                  <td>
+                  <td style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
+                    {leases.find(l => l.tenant_id === t.id) && (
+                      <button className="btn btn--primary btn--sm"
+                        onClick={() => setPayingLease(leases.find(l => l.tenant_id === t.id))}>
+                        <CreditCard size={13} /> Payer
+                      </button>
+                    )}
                     <Link to={`/app/tenants/${t.id}`} className="btn btn--secondary btn--sm">
                       Voir profil
                     </Link>
+                    <button className="icon-btn icon-btn--danger" onClick={() => handleDelete(t.id)}>
+                      <Trash2 size={15} />
+                    </button>
                   </td>
                 </tr>
               ))}
