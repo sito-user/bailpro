@@ -69,7 +69,7 @@ export default function TenantsManager() {
   const handleDelete = async (id) => {
     if (!window.confirm('Supprimer ce locataire ?')) return;
     try { await deleteTenant(id); load(); }
-    catch { alert('Impossible de supprimer ce locataire'); }
+    catch (err) { alert(err.response?.data?.message || 'Impossible de supprimer ce locataire'); }
   };
 
   const handleCopy = () => {
